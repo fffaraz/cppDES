@@ -5,10 +5,12 @@ CONFIG -= qt
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    des.cpp
+    des.cpp \
+    des3.cpp
 
 HEADERS += \
     des.h \
     des_data.h \
-    tests.h
+    tests.h \
+    des3.h
 
