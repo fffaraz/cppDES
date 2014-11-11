@@ -3,11 +3,11 @@
 
 #include "des.h"
 
-void test(uint64_t input, uint64_t key)
+void test(ui64 input, ui64 key)
 {
     DES des(key);
 
-    uint64_t result = des.encrypt(input);
+    ui64 result = des.encrypt(input);
     printf("E: %016llX\n", result);
 
     result = des.decrypt(result);
@@ -17,9 +17,9 @@ void test(uint64_t input, uint64_t key)
 
 void test1()
 {
-    uint64_t input  = 0x9474B8E8C73BCA7D;
+    ui64 input  = 0x9474B8E8C73BCA7D;
 
-    for (uint8_t i = 0; i < 16; i++)
+    for (int i = 0; i < 16; i++)
     {
         if (i % 2 == 0)
         {
@@ -36,8 +36,8 @@ void test1()
 
 void test2()
 {
-    uint64_t input = 0x9474B8E8C73BCA7D;
-    uint64_t key   = 0x0000000000000000;
+    ui64 input = 0x9474B8E8C73BCA7D;
+    ui64 key   = 0x0000000000000000;
     printf("\n");
     test(input, key);
     printf("\n");

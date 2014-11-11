@@ -1,62 +1,62 @@
 #include "des.h"
 #include "des_data.h"
 
-DES::DES(uint64_t key)
+DES::DES(ui64 key)
 {
     keygen(key);
 }
 
-uint64_t DES::encrypt(uint64_t block)
+ui64 DES::encrypt(ui64 block)
 {
     return des(block, 'e');
 }
 
-uint64_t DES::decrypt(uint64_t block)
+ui64 DES::decrypt(ui64 block)
 {
     return des(block, 'd');
 }
 
-uint64_t DES::encrypt(uint64_t block, uint64_t key)
+ui64 DES::encrypt(ui64 block, ui64 key)
 {
     DES des(key);
     return des.des(block, 'e');
 }
 
-uint64_t DES::decrypt(uint64_t block, uint64_t key)
+ui64 DES::decrypt(ui64 block, ui64 key)
 {
     DES des(key);
     return des.des(block, 'd');
 }
 
-void DES::keygen(uint64_t key)
+void DES::keygen(ui64 key)
 {
     // initial key schedule calculation
-    uint64_t permuted_choice_1 = 0; // 56 bits
-    for (uint8_t i = 0; i < 56; i++)
+    ui64 permuted_choice_1 = 0; // 56 bits
+    for (ui8 i = 0; i < 56; i++)
     {
         permuted_choice_1 <<= 1;
         permuted_choice_1 |= (key >> (64-PC1[i])) & LB64_MASK;
     }
 
     // 28 bits
-    uint32_t C = (uint32_t) ((permuted_choice_1 >> 28) & 0x000000000fffffff);
-    uint32_t D = (uint32_t) (permuted_choice_1 & 0x000000000fffffff);
+    ui32 C = (ui32) ((permuted_choice_1 >> 28) & 0x000000000fffffff);
+    ui32 D = (ui32) (permuted_choice_1 & 0x000000000fffffff);
 
     // Calculation of the 16 keys
-    for (uint8_t i = 0; i < 16; i++)
+    for (ui8 i = 0; i < 16; i++)
     {
         // key schedule
         // shifting Ci and Di
-        for (uint8_t j = 0; j < iteration_shift[i]; j++)
+        for (ui8 j = 0; j < iteration_shift[i]; j++)
         {
             C = (0x0fffffff & (C << 1)) | (0x00000001 & (C >> 27));
             D = (0x0fffffff & (D << 1)) | (0x00000001 & (D >> 27));
         }
 
-        uint64_t permuted_choice_2 = (((uint64_t) C) << 28) | (uint64_t) D ;
+        ui64 permuted_choice_2 = (((ui64) C) << 28) | (ui64) D ;
 
         sub_key[i] = 0;
-        for (uint8_t j = 0; j < 48; j++)
+        for (ui8 j = 0; j < 48; j++)
         {
             sub_key[i] <<= 1;
             sub_key[i] |= (permuted_choice_2 >> (56-PC2[j])) & LB64_MASK;
@@ -64,29 +64,29 @@ void DES::keygen(uint64_t key)
     }
 }
 
-uint64_t DES::des(uint64_t block, char mode)
+ui64 DES::des(ui64 block, char mode)
 {
     block = ip(block);
 
-    uint32_t L = (uint32_t) (block >> 32) & L64_MASK;;
-    uint32_t R = (uint32_t) (block & L64_MASK);
+    ui32 L = (ui32) (block >> 32) & L64_MASK;;
+    ui32 R = (ui32) (block & L64_MASK);
 
-    for (uint8_t i = 0; i < 16; i++)
+    for (ui8 i = 0; i < 16; i++)
     {
-        uint32_t F = (mode == 'd') ? f(R, sub_key[15-i]) : f(R, sub_key[i]);
+        ui32 F = (mode == 'd') ? f(R, sub_key[15-i]) : f(R, sub_key[i]);
         feistel(L, R, F);
     }
 
-    block = (((uint64_t) R) << 32) | (uint64_t) L;
+    block = (((ui64) R) << 32) | (ui64) L;
     block = pi(block);
     return block;
 }
 
-uint64_t DES::ip(uint64_t block)
+ui64 DES::ip(ui64 block)
 {
     // initial permutation
-    uint64_t result = 0;
-    for (uint8_t i = 0; i < 64; i++)
+    ui64 result = 0;
+    for (ui8 i = 0; i < 64; i++)
     {
         result <<= 1;
         result |= (block >> (64-IP[i])) & LB64_MASK;
@@ -94,11 +94,11 @@ uint64_t DES::ip(uint64_t block)
     return result;
 }
 
-uint64_t DES::pi(uint64_t block)
+ui64 DES::pi(ui64 block)
 {
     // inverse initial permutation
-    uint64_t result = 0;
-    for (uint8_t i = 0; i < 64; i++)
+    ui64 result = 0;
+    for (ui8 i = 0; i < 64; i++)
     {
         result <<= 1;
         result |= (block >> (64-PI[i])) & LB64_MASK;
@@ -106,23 +106,23 @@ uint64_t DES::pi(uint64_t block)
     return result;
 }
 
-void DES::feistel(uint32_t &L, uint32_t &R, uint32_t F)
+void DES::feistel(ui32 &L, ui32 &R, ui32 F)
 {
-    uint32_t temp = R;
+    ui32 temp = R;
     R = L ^ F;
     L = temp;
 }
 
-uint32_t DES::f(uint32_t R, uint64_t k)
+ui32 DES::f(ui32 R, ui64 k)
 {
     // f(R,k) function
-    uint64_t s_input = 0;
+    ui64 s_input = 0;
 
-    for (uint8_t i = 0; i < 48; i++)
+    for (ui8 i = 0; i < 48; i++)
     {
 
         s_input <<= 1;
-        s_input |= (uint64_t) ((R >> (32-E[i])) & LB32_MASK);
+        s_input |= (ui64) ((R >> (32-E[i])) & LB32_MASK);
 
     }
 
@@ -131,8 +131,8 @@ uint32_t DES::f(uint32_t R, uint64_t k)
     s_input = s_input ^ k;
 
     // S-Box Tables
-    uint32_t s_output;
-    for (uint8_t i = 0; i < 8; i++)
+    ui32 s_output;
+    for (ui8 i = 0; i < 8; i++)
     {
         // 00 00 RCCC CR00 00 00 00 00 00 s_input
         // 00 00 1000 0100 00 00 00 00 00 row mask
@@ -145,11 +145,11 @@ uint32_t DES::f(uint32_t R, uint64_t k)
         char column = (char) ((s_input & (0x0000780000000000 >> 6*i)) >> (43-6*i));
 
         s_output <<= 4;
-        s_output |= (uint32_t) (S[i][16*row + column] & 0x0f);
+        s_output |= (ui32) (S[i][16*row + column] & 0x0f);
     }
 
-    uint32_t result = 0;
-    for (uint8_t i = 0; i < 32; i++)
+    ui32 result = 0;
+    for (ui8 i = 0; i < 32; i++)
     {
         result <<= 1;
         result |= (s_output >> (32 - P[i])) & LB32_MASK;
