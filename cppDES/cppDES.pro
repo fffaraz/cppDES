@@ -6,11 +6,13 @@ CONFIG += c++11
 
 SOURCES += main.cpp \
     des.cpp \
-    des3.cpp
+    des3.cpp \
+    descbc.cpp
 
 HEADERS += \
     des.h \
     des_data.h \
     tests.h \
-    des3.h
+    des3.h \
+    descbc.h
 
