@@ -14,6 +14,7 @@ ui64 DESCBC::encrypt(uint64_t block)
 
 ui64 DESCBC::decrypt(uint64_t block)
 {
-    last_block = des.decrypt(block ^ last_block);
-    return last_block;
+    ui64 result = des.decrypt(block) ^ last_block;
+    last_block = block;
+    return result;
 }

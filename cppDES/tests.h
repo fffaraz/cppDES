@@ -3,6 +3,7 @@
 
 #include "des.h"
 #include "des3.h"
+#include "descbc.h"
 
 void test(ui64 input, ui64 key)
 {
@@ -63,12 +64,31 @@ void test4()
     printf("P: %016llX\n", input);
 }
 
+void test5()
+{
+    DESCBC des(0x0000000000000000, 0x0000000000000000);
+
+    ui64 input1 = 0x0000000000000000;
+    ui64 input2 = 0x0000000000000000;
+    ui64 input3 = 0x0000000000000000;
+
+    printf("P1: %016llX\n", input1);
+    printf("E1: %016llX\n", des.encrypt(input1));
+
+    printf("P2: %016llX\n", input2);
+    printf("E2: %016llX\n", des.encrypt(input2));
+
+    printf("P3: %016llX\n", input3);
+    printf("E3: %016llX\n", des.encrypt(input3));
+}
+
 void alltests()
 {
     //test1();
     //test2();
     //test3();
-    test4();
+    //test4();
+    test5();
 }
 
 #endif // TESTS_H
