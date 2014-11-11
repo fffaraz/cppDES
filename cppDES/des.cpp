@@ -53,7 +53,7 @@ void DES::keygen(ui64 key)
             D = (0x0fffffff & (D << 1)) | (0x00000001 & (D >> 27));
         }
 
-        ui64 permuted_choice_2 = (((ui64) C) << 28) | (ui64) D ;
+        ui64 permuted_choice_2 = (((ui64) C) << 28) | (ui64) D;
 
         sub_key[i] = 0;
         for (ui8 j = 0; j < 48; j++)
@@ -68,7 +68,7 @@ ui64 DES::des(ui64 block, bool mode)
 {
     block = ip(block);
 
-    ui32 L = (ui32) (block >> 32) & L64_MASK;;
+    ui32 L = (ui32) (block >> 32) & L64_MASK;
     ui32 R = (ui32) (block & L64_MASK);
 
     for (ui8 i = 0; i < 16; i++)
