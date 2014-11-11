@@ -14,5 +14,5 @@ ui64 DES3::encrypt(uint64_t block)
 
 ui64 DES3::decrypt(uint64_t block)
 {
-    return des3.decrypt(des2.encrypt(des1.decrypt(block)));
+    return des1.decrypt(des2.encrypt(des3.decrypt(block)));
 }
