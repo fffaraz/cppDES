@@ -12,7 +12,7 @@ class DES
 {
 public:
     DES(ui64 key);
-    ui64 des(ui64 block, char mode);
+    ui64 des(ui64 block, bool mode);
 
     ui64 encrypt(ui64 block);
     ui64 decrypt(ui64 block);

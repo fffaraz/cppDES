@@ -8,24 +8,24 @@ DES::DES(ui64 key)
 
 ui64 DES::encrypt(ui64 block)
 {
-    return des(block, 'e');
+    return des(block, false);
 }
 
 ui64 DES::decrypt(ui64 block)
 {
-    return des(block, 'd');
+    return des(block, true);
 }
 
 ui64 DES::encrypt(ui64 block, ui64 key)
 {
     DES des(key);
-    return des.des(block, 'e');
+    return des.des(block, false);
 }
 
 ui64 DES::decrypt(ui64 block, ui64 key)
 {
     DES des(key);
-    return des.des(block, 'd');
+    return des.des(block, true);
 }
 
 void DES::keygen(ui64 key)
@@ -64,7 +64,7 @@ void DES::keygen(ui64 key)
     }
 }
 
-ui64 DES::des(ui64 block, char mode)
+ui64 DES::des(ui64 block, bool mode)
 {
     block = ip(block);
 
@@ -73,7 +73,7 @@ ui64 DES::des(ui64 block, char mode)
 
     for (ui8 i = 0; i < 16; i++)
     {
-        ui32 F = (mode == 'd') ? f(R, sub_key[15-i]) : f(R, sub_key[i]);
+        ui32 F = mode ? f(R, sub_key[15-i]) : f(R, sub_key[i]);
         feistel(L, R, F);
     }
 
