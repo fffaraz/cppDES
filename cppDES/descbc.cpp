@@ -2,6 +2,7 @@
 
 DESCBC::DESCBC(uint64_t key, uint64_t iv) :
     des(key),
+    iv(iv),
     last_block(iv)
 {
 }
@@ -17,4 +18,9 @@ ui64 DESCBC::decrypt(uint64_t block)
     ui64 result = des.decrypt(block) ^ last_block;
     last_block = block;
     return result;
+}
+
+void DESCBC::reset()
+{
+    last_block = iv;
 }
