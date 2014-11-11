@@ -6,6 +6,28 @@ DES::DES(uint64_t key)
     keygen(key);
 }
 
+uint64_t DES::encrypt(uint64_t block)
+{
+    return des(block, 'e');
+}
+
+uint64_t DES::decrypt(uint64_t block)
+{
+    return des(block, 'd');
+}
+
+uint64_t DES::encrypt(uint64_t block, uint64_t key)
+{
+    DES des(key);
+    return des.des(block, 'e');
+}
+
+uint64_t DES::decrypt(uint64_t block, uint64_t key)
+{
+    DES des(key);
+    return des.des(block, 'd');
+}
+
 void DES::keygen(uint64_t key)
 {
     // initial key schedule calculation
@@ -40,28 +62,6 @@ void DES::keygen(uint64_t key)
             sub_key[i] |= (permuted_choice_2 >> (56-PC2[j])) & LB64_MASK;
         }
     }
-}
-
-uint64_t DES::encrypt(uint64_t block)
-{
-    return des(block, 'e');
-}
-
-uint64_t DES::decrypt(uint64_t block)
-{
-    return des(block, 'd');
-}
-
-uint64_t DES::encrypt(uint64_t block, uint64_t key)
-{
-    DES des(key);
-    return des.des(block, 'e');
-}
-
-uint64_t DES::decrypt(uint64_t block, uint64_t key)
-{
-    DES des(key);
-    return des.des(block, 'd');
 }
 
 uint64_t DES::des(uint64_t block, char mode)
@@ -118,11 +118,11 @@ uint32_t DES::f(uint32_t R, uint64_t k)
     // f(R,k) function
     uint64_t s_input = 0;
 
-    for (uint8_t j = 0; j < 48; j++)
+    for (uint8_t i = 0; i < 48; i++)
     {
 
         s_input <<= 1;
-        s_input |= (uint64_t) ((R >> (32-E[j])) & LB32_MASK);
+        s_input |= (uint64_t) ((R >> (32-E[i])) & LB32_MASK);
 
     }
 
@@ -132,27 +132,27 @@ uint32_t DES::f(uint32_t R, uint64_t k)
 
     // S-Box Tables
     uint32_t s_output;
-    for (uint8_t j = 0; j < 8; j++)
+    for (uint8_t i = 0; i < 8; i++)
     {
         // 00 00 RCCC CR00 00 00 00 00 00 s_input
         // 00 00 1000 0100 00 00 00 00 00 row mask
         // 00 00 0111 1000 00 00 00 00 00 column mask
 
         char row;
-        row = (char) ((s_input & (0x0000840000000000 >> 6*j)) >> (42-6*j));
+        row = (char) ((s_input & (0x0000840000000000 >> 6*i)) >> (42-6*i));
         row = (row >> 4) | (row & 0x01);
 
-        char column = (char) ((s_input & (0x0000780000000000 >> 6*j)) >> (43-6*j));
+        char column = (char) ((s_input & (0x0000780000000000 >> 6*i)) >> (43-6*i));
 
         s_output <<= 4;
-        s_output |= (uint32_t) (S[j][16*row + column] & 0x0f);
+        s_output |= (uint32_t) (S[i][16*row + column] & 0x0f);
     }
 
     uint32_t result = 0;
-    for (uint8_t j = 0; j < 32; j++)
+    for (uint8_t i = 0; i < 32; i++)
     {
         result <<= 1;
-        result |= (s_output >> (32 - P[j])) & LB32_MASK;
+        result |= (s_output >> (32 - P[i])) & LB32_MASK;
     }
 
     return result;

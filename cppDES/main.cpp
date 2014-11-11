@@ -8,4 +8,3 @@ int main()
     alltests();
     return 0;
 }
-
