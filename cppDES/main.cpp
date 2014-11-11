@@ -3,38 +3,48 @@ using namespace std;
 
 #include "des.h"
 
-int main()
+void test1()
 {
     uint64_t input  = 0x9474B8E8C73BCA7D;
-    uint64_t key    = 0x0000000000000000;
-    uint64_t result = input;
 
     for (uint8_t i = 0; i < 16; i++)
     {
-        DES des(result);
+        DES des(input);
 
-        if (i%2 == 0)
+        if (i % 2 == 0)
         {
-            result = des.des(result, 'e');
-            printf("E: %016llx\n", result);
+            input = des.encrypt(input);
+            printf("E: %016llX\n", input);
         }
         else
         {
-            result = des.des(result, 'd');
-            printf("D: %016llx\n", result);
+            input = des.decrypt(input);
+            printf("D: %016llX\n", input);
         }
     }
+}
 
-    printf("----\n");
+void test2()
+{
+    uint64_t input = 0x9474B8E8C73BCA7D;
+    uint64_t key   = 0x0000000000000000;
+    uint64_t result;
 
     DES des(key);
 
-    result = des.des(input, 'e');
-    printf ("E: %016llx\n", result);
+    printf("\nP: %016llX\n", input);
 
-    result = des.des(result, 'd');
-    printf ("D: %016llx\n", result);
+    result = des.encrypt(input);
+    printf("E: %016llX\n", result);
 
+    result = des.encrypt(result);
+    printf("D: %016llX\n\n", result);
+}
+
+int main()
+{
+    test1();
+    test2();
     return 0;
 }
 
