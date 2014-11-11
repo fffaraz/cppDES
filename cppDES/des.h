@@ -8,9 +8,13 @@ class DES
 {
 public:
     DES(uint64_t key);
+    uint64_t des(uint64_t block, char mode);
+
     uint64_t encrypt(uint64_t block);
     uint64_t decrypt(uint64_t block);
-    uint64_t des(uint64_t block, char mode);
+
+    static uint64_t encrypt(uint64_t block, uint64_t key);
+    static uint64_t decrypt(uint64_t block, uint64_t key);
 
 private:
     uint64_t sub_key[16]; // 48 bits

@@ -52,6 +52,18 @@ uint64_t DES::decrypt(uint64_t block)
     return des(block, 'd');
 }
 
+uint64_t DES::encrypt(uint64_t block, uint64_t key)
+{
+    DES des(key);
+    return des.des(block, 'e');
+}
+
+uint64_t DES::decrypt(uint64_t block, uint64_t key)
+{
+    DES des(key);
+    return des.des(block, 'd');
+}
+
 uint64_t DES::des(uint64_t block, char mode)
 {
     block = ip(block);

@@ -9,5 +9,6 @@ SOURCES += main.cpp \
 
 HEADERS += \
     des.h \
-    des_data.h
+    des_data.h \
+    tests.h
 
