@@ -27,13 +27,13 @@ int FileEncryption::cipher(string input, string output, bool mode)
     ifile.open(input,  ios::binary | ios::in | ios::ate);
     ofile.open(output, ios::binary | ios::out);
 
-    int size = ifile.tellg();
+    ui64 size = ifile.tellg();
     ifile.seekg(0, ios::beg);
 
-    int block = size / 8;
+    ui64 block = size / 8;
     if(mode) block--;
 
-    for(int i = 0; i < block; i++)
+    for(ui64 i = 0; i < block; i++)
     {
         ifile.read((char*) &buffer, 8);
 
@@ -48,7 +48,7 @@ int FileEncryption::cipher(string input, string output, bool mode)
     if(mode == false)
     {
         // Amount of padding needed
-        int padding = 8 - (size % 8);
+        ui8 padding = 8 - (size % 8);
 
         // Padding cannot be 0 (pad full block)
         if (padding == 0)
@@ -60,7 +60,7 @@ int FileEncryption::cipher(string input, string output, bool mode)
             ifile.read((char*) &buffer, 8 - padding);
 
         // Pad block with a 1 followed by 0s
-        int shift = padding * 8;
+        ui8 shift = padding * 8;
         buffer <<= shift;
         buffer  |= (ui64) 0x0000000000000001 << (shift - 1);
 
@@ -74,7 +74,7 @@ int FileEncryption::cipher(string input, string output, bool mode)
         buffer = des.decrypt(buffer);
 
         // Amount of padding on file
-        int padding = 0;
+        ui8 padding = 0;
 
         // Check for and record padding on end
         while(!(buffer & 0x00000000000000ff))
