@@ -21,6 +21,9 @@ int FileEncryption::cipher(string input, string output, bool mode)
     ofstream ofile;
     ui64 buffer;
 
+    if(input.length()  < 1) input  = "/dev/stdin";
+    if(output.length() < 1) output = "/dev/stdout";
+
     ifile.open(input,  ios::binary | ios::in | ios::ate);
     ofile.open(output, ios::binary | ios::out);
 

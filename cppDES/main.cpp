@@ -6,7 +6,7 @@ using namespace std;
 
 void usage()
 {
-    cout << "Usage: cppDES -e/-d key input-file output-file" << endl;
+    cout << "Usage: cppDES -e/-d key [input-file] [output-file]" << endl;
 }
 
 int main(int argc, char **argv)
@@ -20,15 +20,13 @@ int main(int argc, char **argv)
     }
 
     string enc_dec = argv[1];
-    string input = "-";
-    string output = input;
-
     if(enc_dec != "-e" && enc_dec != "-d")
     {
         usage();
         return 2;
     }
 
+    string input,output;
     if(argc > 3)
         input  = argv[3];
     if(argc > 4)
@@ -40,9 +38,9 @@ int main(int argc, char **argv)
     FileEncryption fe(key);
 
     if(enc_dec == "-e")
-        fe.encrypt(input, output);
+        return fe.encrypt(input, output);
     if(enc_dec == "-d")
-        fe.decrypt(input, output);
+        return fe.decrypt(input, output);
 
     return 0;
 }
