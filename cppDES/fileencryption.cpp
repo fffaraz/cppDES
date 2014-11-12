@@ -15,7 +15,6 @@ int FileEncryption::decrypt(string input, string output)
     return cipher(input, output, true);
 }
 
-
 int FileEncryption::cipher(string input, string output, bool mode)
 {
     ifstream ifile;
@@ -28,7 +27,10 @@ int FileEncryption::cipher(string input, string output, bool mode)
     int size = ifile.tellg();
     ifile.seekg(0, ios::beg);
 
-    for (int i = 0; i < size / 8; i++)
+    int block = size / 8;
+    if(mode) block--;
+
+    for(int i = 0; i < block; i++)
     {
         ifile.read((char*) &buffer, 8);
 
@@ -40,35 +42,50 @@ int FileEncryption::cipher(string input, string output, bool mode)
         ofile.write((char*) &buffer, 8);
     }
 
-    // Amount of padding needed
-    int padding = 8 - (size % 8);
-
-    /*
-    // Padding cannot be 0 (pad full block)
-    if (padding == 0)
-        padding  = 8;
-    */
-
-    // Read remaining part of file
-    buffer = 0;
-    if(padding != 8)
-        ifile.read((char*) &buffer, 8 - padding);
-
-    /*
-    // Pad block with a 1 followed by 0s
-    buffer[8 - padding] = 1;
-    for(int i = 1; i < padding; i++)
+    if(mode == false)
     {
-        buffer[8 - i] = 0;
-    }
-    */
+        // Amount of padding needed
+        int padding = 8 - (size % 8);
 
-    if(mode)
-        buffer = des.decrypt(buffer);
-    else
+        // Padding cannot be 0 (pad full block)
+        if (padding == 0)
+            padding  = 8;
+
+        // Read remaining part of file
+        buffer = (ui64) 0;
+        if(padding != 8)
+            ifile.read((char*) &buffer, 8 - padding);
+
+        // Pad block with a 1 followed by 0s
+        int shift = padding * 8;
+        buffer <<= shift;
+        buffer  |= (ui64) 0x0000000000000001 << (shift - 1);
+
         buffer = des.encrypt(buffer);
+        ofile.write((char*) &buffer, 8);
+    }
+    else
+    {
+        // Read last line of file
+        ifile.read((char*) &buffer, 8);
+        buffer = des.decrypt(buffer);
 
-    ofile.write((char*) &buffer, 8);
+        // Amount of padding on file
+        int padding = 0;
+
+        // Check for and record padding on end
+        while(!(buffer & 0x00000000000000ff))
+        {
+            buffer >>= 8;
+            padding++;
+        }
+
+        buffer >>= 8;
+        padding++;
+
+        if(padding != 8)
+            ofile.write((char*) &buffer, 8 - padding);
+    }
 
     ifile.close();
     ofile.close();
