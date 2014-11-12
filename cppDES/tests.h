@@ -10,11 +10,11 @@ void test(ui64 input, ui64 key)
     DES des(key);
 
     ui64 result = des.encrypt(input);
-    printf("E: %016llX\n", result);
+    printf("E: %016lX\n", result);
 
     result = des.decrypt(result);
-    printf("D: %016llX\n", result);
-    printf("P: %016llX\n", input);
+    printf("D: %016lX\n", result);
+    printf("P: %016lX\n", input);
 }
 
 void test1()
@@ -26,12 +26,12 @@ void test1()
         if (i % 2 == 0)
         {
             input = DES::encrypt(input, input);
-            printf("E: %016llX\n", input);
+            printf("E: %016lX\n", input);
         }
         else
         {
             input = DES::decrypt(input, input);
-            printf("D: %016llX\n", input);
+            printf("D: %016lX\n", input);
         }
     }
 }
@@ -57,11 +57,11 @@ void test4()
     ui64 input = 0x8598538A8ECF117D;
 
     ui64 result = des.encrypt(input);
-    printf("E: %016llX\n", result);
+    printf("E: %016lX\n", result);
 
     result = des.decrypt(result);
-    printf("D: %016llX\n", result);
-    printf("P: %016llX\n", input);
+    printf("D: %016lX\n", result);
+    printf("P: %016lX\n", input);
 }
 
 void test5()
@@ -72,22 +72,22 @@ void test5()
     ui64 input2 = 0x0000000000000000;
     ui64 input3 = 0x0000000000000000;
 
-    printf("P1: %016llX\n", input1);
-    printf("E1: %016llX\n\n", des.encrypt(input1));
+    printf("P1: %016lX\n", input1);
+    printf("E1: %016lX\n\n", des.encrypt(input1));
 
-    printf("P2: %016llX\n", input2);
-    printf("E2: %016llX\n\n", des.encrypt(input2));
+    printf("P2: %016lX\n", input2);
+    printf("E2: %016lX\n\n", des.encrypt(input2));
 
-    printf("P3: %016llX\n", input3);
-    printf("E3: %016llX  \n", des.encrypt(input3));
+    printf("P3: %016lX\n", input3);
+    printf("E3: %016lX  \n", des.encrypt(input3));
 }
 
 void alltests()
 {
-    //test1();
-    //test2();
-    //test3();
-    //test4();
+    test1();
+    test2();
+    test3();
+    test4();
     test5();
 }
 
