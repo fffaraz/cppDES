@@ -45,8 +45,7 @@ void DES::keygen(ui64 key)
     // Calculation of the 16 keys
     for (ui8 i = 0; i < 16; i++)
     {
-        // key schedule
-        // shifting Ci and Di
+        // key schedule, shifting Ci and Di
         for (ui8 j = 0; j < iteration_shift[i]; j++)
         {
             C = (0x0fffffff & (C << 1)) | (0x00000001 & (C >> 27));
@@ -78,8 +77,7 @@ ui64 DES::des(ui64 block, bool mode)
     }
 
     block = (((ui64) R) << 32) | (ui64) L;
-    block = pi(block);
-    return block;
+    return pi(block);
 }
 
 ui64 DES::ip(ui64 block)
@@ -113,20 +111,15 @@ void DES::feistel(ui32 &L, ui32 &R, ui32 F)
     L = temp;
 }
 
-ui32 DES::f(ui32 R, ui64 k)
+ui32 DES::f(ui32 R, ui64 k) // f(R,k) function
 {
-    // f(R,k) function
     ui64 s_input = 0;
-
     for (ui8 i = 0; i < 48; i++)
     {
-
         s_input <<= 1;
         s_input |= (ui64) ((R >> (32-E[i])) & LB32_MASK);
-
     }
 
-    // Encryption/Decryption
     // XORing expanded Ri with Ki
     s_input = s_input ^ k;
 
@@ -134,12 +127,7 @@ ui32 DES::f(ui32 R, ui64 k)
     ui32 s_output;
     for (ui8 i = 0; i < 8; i++)
     {
-        // 00 00 RCCC CR00 00 00 00 00 00 s_input
-        // 00 00 1000 0100 00 00 00 00 00 row mask
-        // 00 00 0111 1000 00 00 00 00 00 column mask
-
-        char row;
-        row = (char) ((s_input & (0x0000840000000000 >> 6*i)) >> (42-6*i));
+        char row = (char) ((s_input & (0x0000840000000000 >> 6*i)) >> (42-6*i));
         row = (row >> 4) | (row & 0x01);
 
         char column = (char) ((s_input & (0x0000780000000000 >> 6*i)) >> (43-6*i));
@@ -148,12 +136,12 @@ ui32 DES::f(ui32 R, ui64 k)
         s_output |= (ui32) (S[i][16*row + column] & 0x0f);
     }
 
-    ui32 result = 0;
+    ui32 f_result = 0;
     for (ui8 i = 0; i < 32; i++)
     {
-        result <<= 1;
-        result |= (s_output >> (32 - P[i])) & LB32_MASK;
+        f_result <<= 1;
+        f_result |= (s_output >> (32 - P[i])) & LB32_MASK;
     }
 
-    return result;
+    return f_result;
 }
