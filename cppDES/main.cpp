@@ -32,9 +32,7 @@ int main(int argc, char **argv)
     if(argc > 4)
         output = argv[4];
 
-    string strkey = argv[2];
-    ui64 key = stoi(strkey, nullptr, 16);
-
+    ui64 key = strtoull(argv[2], nullptr, 16);
     FileEncryption fe(key);
 
     if(enc_dec == "-e")
