@@ -124,7 +124,7 @@ ui32 DES::f(ui32 R, ui64 k) // f(R,k) function
     s_input = s_input ^ k;
 
     // S-Box Tables
-    ui32 s_output;
+    ui32 s_output = 0;
     for (ui8 i = 0; i < 8; i++)
     {
         char row = (char) ((s_input & (0x0000840000000000 >> 6*i)) >> (42-6*i));
