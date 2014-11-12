@@ -40,7 +40,7 @@ void DES::keygen(ui64 key)
 
     // 28 bits
     ui32 C = (ui32) ((permuted_choice_1 >> 28) & 0x000000000fffffff);
-    ui32 D = (ui32) (permuted_choice_1 & 0x000000000fffffff);
+    ui32 D = (ui32)  (permuted_choice_1 & 0x000000000fffffff);
 
     // Calculation of the 16 keys
     for (ui8 i = 0; i < 16; i++)
