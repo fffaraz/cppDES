@@ -11,7 +11,7 @@ void usage()
 
 int main(int argc, char **argv)
 {
-    alltests(); return 0;
+    //alltests(); return 0;
 
     if(argc < 3)
     {
