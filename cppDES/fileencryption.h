@@ -15,7 +15,7 @@ public:
     FileEncryption(ui64 key);
     int encrypt(string input, string output);
     int decrypt(string input, string output);
-    int cipher(string input, string output, bool mode);
+    int cipher (string input, string output, bool mode);
 
 private:
     DESCBC des;
