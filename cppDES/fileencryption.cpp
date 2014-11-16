@@ -1,6 +1,6 @@
 #include "fileencryption.h"
 
-FileEncryption::FileEncryption(uint64_t key) :
+FileEncryption::FileEncryption(ui64 key) :
     des(key, (ui64) 0x0000000000000000)
 {
 }

@@ -26,8 +26,8 @@ protected:
     ui64 ip(ui64 block);
     ui64 pi(ui64 block);
 
-    void feistel(uint32_t &L, uint32_t &R, uint32_t F);
-    uint32_t f(uint32_t R, ui64 k);
+    void feistel(ui32 &L, ui32 &R, ui32 F);
+    ui32 f(ui32 R, ui64 k);
 
 private:
     ui64 sub_key[16]; // 48 bits
