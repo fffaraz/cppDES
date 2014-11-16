@@ -3,7 +3,7 @@ cppDES
 
 C++ implementation of Data Encryption Standard
 
-DES, 3DES, DES ECB Mode, DES CBC Mode
+DES, Triple DES (3DES), DES ECB Mode, DES CBC Mode
 
 The Data Encryption Standard (DES) has been a standard encryption method in the United States for a number of years. It is moderately secure. No easy ways have been found to crack it, although a brute-force approach, using expensive special-purpose equipment, is probably feasible.
 
