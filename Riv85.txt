@@ -1,0 +1,280 @@
+		TESTING IMPLEMENTATIONS OF DES
+		------------------------------
+
+		Ronald L. Rivest
+		MIT Laboratory for Computer Science
+		Cambridge, Mass. 02139
+		2/23/85
+
+
+ABSTRACT
+--------
+
+We present a simple way to test the correctness of a DES implementation:
+Use the recurrence relation:
+
+	X0      =       9474B8E8C73BCA7D (hexadecimal)
+
+	X(i+1)  =       IF  (i is even)  THEN  E(Xi,Xi)  ELSE  D(Xi,Xi)
+
+to compute a sequence of 64-bit values:  X0, X1, X2, ..., X16.  Here
+E(X,K)  denotes the DES encryption of  X  using key  K, and  D(X,K)  denotes
+the DES decryption of  X  using key  K.  If you obtain
+
+	X16     =       1B1A2DDB4C642438
+
+your implementation does not have any of the 36,568 possible single-fault 
+errors described herein.
+
+
+INTRODUCTION
+------------
+
+The Data Encryption Standard (DES) has been approved by a variety of 
+organizations (e.g. the U.S. government) for use in cryptographic applications.
+The DES algorithm was published by the National Bureau of Standards [FIPS46].
+
+The National Bureau of Standards has an ongoing program to validate the 
+correctness of hardware DES implementations.  Their testing procedure,
+described in [Ga80a], consists of 291 fixed test cases followed by twelve
+million randomly chosen test cases.  A hardware implementation of DES that 
+passes this test is awarded a "Validation Certficate".  
+
+The above testing procedure provides good evidence that the DES hardware was
+correctly designed and functioning properly at the time of validation.  
+However, the user of a DES implementation would like to maintain the currency
+of this validation -- this would be "maintenance testing" in contrast
+to the "validation" service provided by NBS.  The purpose of maintenance 
+testing is to ensure that the DES implementation is still correct, i.e.
+that no operational fault has appeared since the last time the the device 
+was tested.  Also note that NBS's validation procedure only inspects single
+instances of a hardware device; the user of a DES device wants to ensure that
+his device is correctly functioning (even though the design is OK, the device
+may have developed faults).
+
+One way to perform maintenance testing is to use two or more separate
+implementations and compare their results after each operation.  If they
+ever differ, then one of the units has ceased to operate correctly.  The
+difficulty with this approach is the cost of providing the redundant
+implementation.  
+
+If a redundant implementation is infeasible, then the implementation may
+be testing by comparing its input-output behaviour with that of a correct
+implementation.  This paper provides such a procedure.  
+
+It is desired to have a relatively short test procedure, since the
+maintenance testing may be taking place in parallel with ordinary operations,
+and the cost of the test procedure may affect the unit's overall
+efficiency.  The test specified in this paper only requires 16 DES operations.
+
+It is desirable to have an effective test procedure, in the
+sense that implementation errors are very likely to be caught.  The test
+specified here will catch any of the 36,568 single-fault implementation
+errors specified later on.  
+
+We next specify the DES implementation and error model, and then describe 
+the experimental results that yielded the proposed maintenance test.
+
+
+DES IMPLEMENTATION
+------------------
+
+Our DES implementation follows the specifications for DES:
+
+	DES(X,K,E)
+		-- X is a 64-bit input value
+		-- K is a 64-bit key
+		-- E is TRUE if we are encrypting, else FALSE
+	(1) Apply permutation IP to X, resulting in value LR (64 bits).
+	(2) Apply selector PC1 to K, resulting in value CD (56 bits).
+	(3) For ROUND = 1, 2, ..., 16:
+		(3a) if E is TRUE then
+			if SHIFTS[ROUND] = 1
+			then apply permutation LSH1 to CD (in place).
+			else apply permutation LSH2 to CD (in place).
+		(3b) Apply selector PC2 to CD resulting in value KI (48 bits)
+		(3c) If E is FALSE then
+			if SHIFTS[17-ROUND] = 1 
+			then apply permutation RSH1 to CD (in place).
+			else apply permutation RSH2 to CD (in place).
+		(3d) Apply selector E to LR, resulting in value RE (48 bits).
+		(3e) XOR RE with KI, resulting in value RX (48 bits).
+		(3f) Break RX into 8 6-bit blocks, and replace the i-th block
+		     Yi with the result of looking up Yi in S-box i.  
+		     Concatenate these 4-bit results together to get the 32-bit
+		     value SOUT.
+		(3g) Apply permutation P to SOUT resulting in value FOUT (32 
+		     bits).
+		(3h) Replace the left half of LR with the XOR of FOUT and the
+		     left half of LR.
+		(3i) If ROUND is not 16, apply permutation SWAP to LR (in
+		     place).
+	(4) Apply permutation IPINV to LR resulting in value OUT (64 bits).
+	    Return OUT as the result of this DES operation.
+
+
+This implementation makes uses of the following tables and functions (for 
+the details of these tables see [FIPS46]):
+
+	(1) Permutations and selectors: IP, PC1, PC2, LSH1, LSH2, RSH1, RSH2, 
+					E, P, SWAP, IPINV.
+	    Each permutation or selector Q has a length LENGTH(Q) and a range
+	    1...RANGE(Q).  For permutations LENGTH(Q)=RANGE(Q).  As an example,
+	    the selector PC2 = [14, 17, ..., 32] has length 48 and range 56,
+	    while permutation SWAP = [33, 34, ..., 32] has length 64 and range
+	    64.
+	
+	(2) The table SHIFTS = [1, 1, 2, ..., 1] of length 16 specifying the
+	    number of left shifts of the key registers to perform during 
+	    each round.
+	
+	(3) The XOR (exclusive-OR) functions used in steps (3e) and (3h), on
+	    input vectors of lengths 48 and 32, respectively.
+	
+	(4) The S-box tables used in step (3f).
+
+
+
+ERROR MODEL
+-----------
+
+We now describe our model of implementation errors.  We consider the following
+set of single-fault errors:
+
+	(1) "Wiring errors": For each permutation or selector Q, we consider
+	    the possibility that each of the output elements might 
+		-- be stuck at 0
+		-- be stuck at 1
+		-- incorrectly specify some other value in 1...RANGE(Q).
+	    There are thus LENGTH(Q)*(RANGE(Q)+1) possible errors for Q.
+
+		Permutation                                     Number
+		or                                              of Possible
+		Selector        LENGTH          RANGE           Errors 
+		------------    -------         ------          -----------
+		IP              64              64              4160
+		PC1             56              64              3640
+		PC2             48              56              2736
+		LSH1            56              56              3192
+		LSH2            56              56              3192
+		RSH1            56              56              3192
+		RHS2            56              56              3192
+		E               48              32              1584
+		P               32              32              1056
+		SWAP            64              64              4160
+		IPINV           64              64              4160
+		-----------------------------------------------------------
+		Total Number of Possible Wiring Errors........34,264
+
+	(2) Shift Errors: For each of the 16 positions of the SHIFTS table,
+	    one error possibility is that the table entry could be incorrectly
+	    specified (i.e. specify a shift of 1 when a shift of two was
+	    desired, or vice versa).
+
+		Total Number of Possible Shifting Errors..........16
+
+	(3) XOR errors: For each XOR gate (there are 48 used in step (3e)
+	    and 32 used in step (3h)) the following errors are possible:
+		-- stuck at 0
+		-- stuck at 1
+		-- producing the negation of the desired result.
+
+		Total Number of Possible XOR Errors..............240
+
+	(4) SBOX errors: For each of the 8 * 64 * 4 = 2048 bits of the S-box
+	    tables, we consider the possibility that it might be incorrectly
+	    stored (i.e. a 0 is stored instead of a 1, or vice versa).
+
+		Total Number of Possible SBOX Errors............2048
+
+	-------------------------------------------------------------------
+	Total Number of Error Possibilities Considered........36,568
+
+We note that since our implementation is iterative, an error possibility
+that can affect one round of encryption can affect every round.  
+
+
+DESIGN OF VALIDATION TEST
+-------------------------
+
+A simple iterative test was desired, so that the only storage
+requirements were the desired starting value, the desired ending value, and
+the number of DES iterations to perform.  Alternation of encryption and 
+decryption was chosen in order to exercise both modes equally.  The initial 
+value, X0 = 9474B8E8C73BCA7D (hexadecimal) was chosen with a short search,
+in order to find a sequence that tested the S-box entries efficiently.
+To generate a pseudo-random sequence of test values, the output of
+one stage is used as both the key and data inputs for the next stage.
+That is, the pseudo-random sequence is defined by:
+
+	X0      =       9474B8E8C73BCA7D
+
+	X(i+1)  =       E(Xi,Xi)        if i is even
+	X(i+1)  =       D(Xi,Xi)        if i is odd
+
+where E(X,K) denotes the encryption of the 64-bit value X with 64-bit key
+K, and D(X,K) denotes the corresponding decryption.  Note that the key is
+a 64-bit value as specified in [FIPS46]; the 8 "parity" bits are discarded by 
+selector PC1.  
+
+DES was implemented in software on an IBM PC.  The correctness of this
+implementation was checked using the 291 fixed tests given in [Ga77]. 
+The various error possibilities were implemented, and an experiment was
+run to determine the least i such that comparing Xi to its expected value
+detected all the proposed single-fault errors.  Note that only one comparison
+is needed; it is not necessary to compare the intermediate results with their
+expected values.  The following table was obtained:
+
+	i       Xi                      Number of errors NOT detected
+	--      ----------------        -----------------------------
+	0       9474B8E8C73BCA7D        36,568
+	1       8DA744E0C94E5E17        14,170
+	2       0CDB25E3BA3C6D79         4,842
+	3       4784C4BA5006081F         2,866
+	4       1CF1FC126F2EF842         1,550
+	5       E4BE250042098D13           996
+	6       7BFC5DC6ADB5797C           652
+	7       1AB3B4D82082FB28           458
+	8       C1576A14DE707097           274
+	9       739B68CD2E26782A           180
+	10      2A59F0C464506EDB           126
+	11      A5C39D4251F0A81E            94
+	12      7239AC9A6107DDB1            72
+	13      070CAC8590241233            52
+	14      78F87B6E3DFECF61            20
+	15      95EC2578C2C433F0             4
+	16      1B1A2DDB4C642438             0
+
+We conclude that at most 16 DES operations suffice to test the correctness
+of a DES implementation, under our error model.
+
+We note that the number of rounds required was determined by the S-box tests.
+The other error types were all detected within at most 11 iterations.
+The number of DES operations required here is 3 less than in the set of S-box
+tests published by NBS[Ga77]; a short search discovered the given starting 
+value.  We leave it as an open problem to devise a test which uses 
+substantially fewer DES operations.
+
+We note that the above test may not catch multiple faults, or faults other than
+those described in this paper.  
+
+
+ACKNOWLEDGEMENTS
+----------------
+
+This work was supported by RSA Data Security, Inc. 
+
+
+REFERENCES
+----------
+
+[FIPS46] "Specifications for the Data Encryption Standard." Federal 
+	Information Processing Standards Publication 46 (January 15, 1977).
+
+[Ga80a] Gait, Jason. "Validating the Correctness of Hardware Implementations 
+       of the NBS Data Encryption Standard".  NBS Special Publication 500-20.
+       (Rev. September 1980).
+
+[Ga80b] Gait, Jason. "Maintenance Testing for the Data Encryption Standard."
+	NBS Special Publication 500-61. (August 1980).
+
