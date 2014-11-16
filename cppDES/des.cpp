@@ -46,7 +46,7 @@ void DES::keygen(ui64 key)
     for (ui8 i = 0; i < 16; i++)
     {
         // key schedule, shifting Ci and Di
-        for (ui8 j = 0; j < iteration_shift[i]; j++)
+        for (ui8 j = 0; j < ITERATION_SHIFT[i]; j++)
         {
             C = (0x0fffffff & (C << 1)) | (0x00000001 & (C >> 27));
             D = (0x0fffffff & (D << 1)) | (0x00000001 & (D >> 27));
@@ -87,7 +87,7 @@ ui64 DES::ip(ui64 block)
     for (ui8 i = 0; i < 64; i++)
     {
         result <<= 1;
-        result |= (block >> (64-IP[i])) & LB64_MASK;
+        result |= (block >> (64-IPTABLE[i])) & LB64_MASK;
     }
     return result;
 }
@@ -99,7 +99,7 @@ ui64 DES::pi(ui64 block)
     for (ui8 i = 0; i < 64; i++)
     {
         result <<= 1;
-        result |= (block >> (64-PI[i])) & LB64_MASK;
+        result |= (block >> (64-PITABLE[i])) & LB64_MASK;
     }
     return result;
 }
@@ -117,7 +117,7 @@ ui32 DES::f(ui32 R, ui64 k) // f(R,k) function
     for (ui8 i = 0; i < 48; i++)
     {
         s_input <<= 1;
-        s_input |= (ui64) ((R >> (32-E[i])) & LB32_MASK);
+        s_input |= (ui64) ((R >> (32-EXPANSION[i])) & LB32_MASK);
     }
 
     // XORing expanded Ri with Ki
@@ -133,14 +133,14 @@ ui32 DES::f(ui32 R, ui64 k) // f(R,k) function
         char column = (char) ((s_input & (0x0000780000000000 >> 6*i)) >> (43-6*i));
 
         s_output <<= 4;
-        s_output |= (ui32) (S[i][16*row + column] & 0x0f);
+        s_output |= (ui32) (SBOX[i][16*row + column] & 0x0f);
     }
 
     ui32 f_result = 0;
     for (ui8 i = 0; i < 32; i++)
     {
         f_result <<= 1;
-        f_result |= (s_output >> (32 - P[i])) & LB32_MASK;
+        f_result |= (s_output >> (32 - PBOX[i])) & LB32_MASK;
     }
 
     return f_result;

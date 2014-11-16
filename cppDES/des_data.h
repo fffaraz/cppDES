@@ -5,8 +5,8 @@
 #define LB64_MASK 0x0000000000000001
 #define L64_MASK  0x00000000ffffffff
 
-/* Initial Permutation Table */
-static const char IP[] =
+// Initial Permutation Table
+static const char IPTABLE[] =
 {
     58, 50, 42, 34, 26, 18, 10, 2,
     60, 52, 44, 36, 28, 20, 12, 4,
@@ -19,7 +19,7 @@ static const char IP[] =
 };
 
 // Inverse Initial Permutation Table
-static const char PI[] =
+static const char PITABLE[] =
 {
     40, 8, 48, 16, 56, 24, 64, 32,
     39, 7, 47, 15, 55, 23, 63, 31,
@@ -32,7 +32,7 @@ static const char PI[] =
 };
 
 // Permuted Choice 1 Table
-static char PC1[] =
+static const char PC1[] =
 {
     57, 49, 41, 33, 25, 17,  9,
      1, 58, 50, 42, 34, 26, 18,
@@ -58,14 +58,14 @@ static const char PC2[] =
 };
 
 // Iteration Shift Array
-static const char iteration_shift[] =
+static const char ITERATION_SHIFT[] =
 {
 //  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16
     1,  1,  2,  2,  2,  2,  2,  2,  1,  2,  2,  2,  2,  2,  2,  1
 };
 
 // Expansion table
-static const char E[] =
+static const char EXPANSION[] =
 {
     32,  1,  2,  3,  4,  5,
      4,  5,  6,  7,  8,  9,
@@ -78,7 +78,7 @@ static const char E[] =
 };
 
 // The S-Box tables
-static char S[8][64] =
+static const char SBOX[8][64] =
 {
     {
         // S1
@@ -139,7 +139,7 @@ static char S[8][64] =
 };
 
 // Post S-Box permutation
-static const char P[] =
+static const char PBOX[] =
 {
     16,  7, 20, 21,
     29, 12, 28, 17,
