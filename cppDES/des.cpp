@@ -1,5 +1,7 @@
 #include "des.h"
+#include "des_key.h"
 #include "des_data.h"
+#include "des_lookup.h"
 
 DES::DES(ui64 key)
 {

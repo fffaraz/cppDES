@@ -30,7 +30,7 @@ protected:
     ui32 f(ui32 R, ui64 k);
 
 private:
-    ui64 sub_key[16]; // 48 bits
+    ui64 sub_key[16]; // 48 bits each
 };
 
 #endif // DES_H
