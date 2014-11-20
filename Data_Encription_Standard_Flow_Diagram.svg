@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"  standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="375" height="382" viewBox="0 0 375 382"
+     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <g id="r1" fill="none">
+      <g id="a1">
+        <path id="p1" d="M1,0 v25 l3,-5 m-3,5 l-3,-5" />
+        <use x="21" xlink:href="#p1" />
+      </g>
+      <use x="7" xlink:href="#a1"/>
+      <use x="14" xlink:href="#a1"/>
+      <rect x="0" y="25" width="38" height="25" fill="#FF8" opacity="0.7" />
+      <path d="M7,50 v25 m7,0 v-25 m7,0 v25 m7,0 v-25" />
+    </g>
+    <path id="p_dwn" fill="none" d="m0,0 v35 l3,-5 m-3,5 l-3,-5" />
+  </defs>
+  <title>DES Flow Diagram</title>
+  <desc>Outline of data flow for DES</desc>
+  <!-- Show outline of canvas using 'rect' element -->
+  <rect x="0" y="0" width="375" height="382"
+        fill="#FFF" stroke="none" stroke-width="2" />
+
+  <g stroke="#000" stroke-width="1" >
+    <use xlink:href="#r1" x="7" y="190" />
+    <use xlink:href="#r1" x="53" y="190" />
+    <use xlink:href="#r1" x="99" y="190" />
+    <use xlink:href="#r1" x="145" y="190" />
+    <use xlink:href="#r1" x="191" y="190" />
+    <use xlink:href="#r1" x="237" y="190" />
+    <use xlink:href="#r1" x="283" y="190" />
+    <use xlink:href="#r1" x="329" y="190" />
+
+    <path d="M7,190 h359" />
+    <path d="M14,265 h344" />
+    <path stroke="#A44" fill="none" d="M187.5,155 a8,8, 0,1,0, -1,0 z" />
+    <path stroke="#A44" fill="none" d="M187,155 v-16 m8,8 h-16" />
+
+    <rect x="7" y="70" width="160" height="40" rx="3" ry="3" fill="#A0FFFF" opacity="0.7" />
+    <rect x="7" y="300" width="359" height="40" rx="3" ry="3" fill="#C8FFA0" opacity="0.y" />
+
+    <use xlink:href="#p_dwn" x="87" y="35" />
+    <use xlink:href="#p_dwn" x="187" y="155" />
+    <use xlink:href="#p_dwn" x="187" y="265" />
+    <use xlink:href="#p_dwn" x="187" y="340" />
+
+    <path fill="none" d="M87,110 v35 h91 l-5,-3 m5,3 l-5,3" />
+    <path fill="none" d="M287,35 v110 h-91 l5,-3 m-5,3 l5,3" />
+
+    <g font-family="Liberation" text-anchor="middle" font-size="14pt" stroke="none"
+        fill="#000" >
+      <text x="87" y="95">E</text>
+      <text x="187" y="325">P</text>
+      <text x="26" y="232">S1</text>
+      <text x="72" y="232">S2</text>
+      <text x="118" y="232">S3</text>
+      <text x="164" y="232">S4</text>
+      <text x="210" y="232">S5</text>
+      <text x="256" y="232">S6</text>
+      <text x="302" y="232">S7</text>
+      <text x="348" y="232">S8</text>
+      <text y="27" x="87">Half Block (32 bits)</text>
+      <text y="27" x="287">Subkey (48 bits)</text>
+    </g>
+  </g>
+<!-- vim:nowrap:sw=2:so=2:et:ai:
+  -->
+</svg>
