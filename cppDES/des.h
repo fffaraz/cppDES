@@ -24,7 +24,7 @@ protected:
     void keygen(ui64 key);
 
     ui64 ip(ui64 block);
-    ui64 pi(ui64 block);
+    ui64 fp(ui64 block);
 
     void feistel(ui32 &L, ui32 &R, ui32 F);
     ui32 f(ui32 R, ui64 k);

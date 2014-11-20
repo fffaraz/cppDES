@@ -5,8 +5,8 @@
 #define LB64_MASK 0x0000000000000001
 #define L64_MASK  0x00000000ffffffff
 
-// Initial Permutation Table
-static const char IPTABLE[] =
+// Initial Permutation Table [8*8]
+static const char IP[] =
 {
     58, 50, 42, 34, 26, 18, 10, 2,
     60, 52, 44, 36, 28, 20, 12, 4,
@@ -18,8 +18,8 @@ static const char IPTABLE[] =
     63, 55, 47, 39, 31, 23, 15, 7
 };
 
-// Inverse Initial Permutation Table
-static const char PITABLE[] =
+// Inverse Initial Permutation Table [8*8]
+static const char FP[] =
 {
     40, 8, 48, 16, 56, 24, 64, 32,
     39, 7, 47, 15, 55, 23, 63, 31,
@@ -31,7 +31,7 @@ static const char PITABLE[] =
     33, 1, 41,  9, 49, 17, 57, 25
 };
 
-// Expansion table
+// Expansion table [6*8]
 static const char EXPANSION[] =
 {
     32,  1,  2,  3,  4,  5,
@@ -44,7 +44,7 @@ static const char EXPANSION[] =
     28, 29, 30, 31, 32,  1
 };
 
-// The S-Box tables
+// The S-Box tables [8*16*4]
 static const char SBOX[8][64] =
 {
     {
@@ -105,7 +105,7 @@ static const char SBOX[8][64] =
     }
 };
 
-// Post S-Box permutation
+// Post S-Box permutation [4*8]
 static const char PBOX[] =
 {
     16,  7, 20, 21,
