@@ -77,6 +77,7 @@ ui64 DES::des(ui64 block, bool mode)
     ui32 L = (ui32) (block >> 32) & L64_MASK;
     ui32 R = (ui32) (block & L64_MASK);
 
+    // 16 rounds
     for (ui8 i = 0; i < 16; i++)
     {
         ui32 F = mode ? f(R, sub_key[15-i]) : f(R, sub_key[i]);
