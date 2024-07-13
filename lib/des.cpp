@@ -1,7 +1,7 @@
 #include "cppdes/des.h"
 
-#include "des_data.h"
 #include "des_key.h"
+#include "des_lookup.h"
 
 #pragma GCC optimize("unroll-loops")
 
@@ -63,6 +63,12 @@ void DES::keygen(ui64 key)
     }
 }
 
+/*!
+ * \brief The DES function.
+ * \param block 64 bit message.
+ * \param mode false for encryption, true for decryption.
+ * \return The encrypted/decrypted block.
+ */
 ui64 DES::des(ui64 block, bool mode)
 {
     // applying initial permutation
@@ -80,6 +86,7 @@ ui64 DES::des(ui64 block, bool mode)
 
     // swapping the two parts
     block = (((ui64)R) << 32) | (ui64)L;
+
     // applying final permutation
     return fp(block);
 }
@@ -113,7 +120,8 @@ void DES::feistel(ui32& L, ui32& R, ui32 F)
     L = temp;
 }
 
-ui32 DES::f(ui32 R, ui64 k) // f(R,k) function
+// f(R,k) function
+ui32 DES::f(ui32 R, ui64 k)
 {
     // applying expansion permutation and returning 48-bit data
     ui64 s_input = 0;
@@ -148,5 +156,3 @@ ui32 DES::f(ui32 R, ui64 k) // f(R,k) function
 
     return f_result;
 }
-
-//#pragma GCC pop_options

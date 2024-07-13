@@ -10,8 +10,8 @@ add_library(
   include/cppdes/des3.h
   include/cppdes/descbc.h
   include/cppdes/fileencryption.h
-  lib/des_data.h
   lib/des_key.h
+  lib/des_lookup.h
   lib/des.cpp
   lib/des3.cpp
   lib/descbc.cpp
