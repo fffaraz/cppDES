@@ -1,9 +1,9 @@
 #include "cppdes/des3.h"
 
-DES3::DES3(ui64 k1, ui64 k2, ui64 k3) :
-    des1(k1),
-    des2(k2),
-    des3(k3)
+DES3::DES3(ui64 k1, ui64 k2, ui64 k3)
+    : des1(k1)
+    , des2(k2)
+    , des3(k3)
 {
 }
 

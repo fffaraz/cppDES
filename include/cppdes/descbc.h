@@ -2,8 +2,7 @@
 
 #include "cppdes/des.h"
 
-class DESCBC
-{
+class DESCBC {
 public:
     DESCBC(ui64 key, ui64 iv);
     ui64 encrypt(ui64 block);

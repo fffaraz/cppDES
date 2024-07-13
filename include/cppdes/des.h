@@ -4,10 +4,9 @@
 
 using ui64 = uint64_t;
 using ui32 = uint32_t;
-using ui8  = uint8_t;
+using ui8 = uint8_t;
 
-class DES
-{
+class DES {
 public:
     DES(ui64 key);
     ui64 des(ui64 block, bool mode);
@@ -24,7 +23,7 @@ protected:
     ui64 ip(ui64 block); // Initial Permutation
     ui64 fp(ui64 block); // Final Permutation
 
-    void feistel(ui32 &L, ui32 &R, ui32 F); // Feistel function
+    void feistel(ui32& L, ui32& R, ui32 F); // Feistel function
     ui32 f(ui32 R, ui64 k); // F function
 
 private:

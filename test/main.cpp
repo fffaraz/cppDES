@@ -2,8 +2,8 @@
 #include "cppdes/des3.h"
 #include "cppdes/descbc.h"
 
-#include <gtest/gtest.h>
 #include <cstdio>
+#include <gtest/gtest.h>
 
 void test(ui64 input, ui64 key)
 {
@@ -15,35 +15,35 @@ void test(ui64 input, ui64 key)
     EXPECT_EQ(input, input2);
 }
 
-TEST(cppDESTest, Test1) {
-    ui64 input  = 0x9474B8E8C73BCA7D;
-    for (int i = 0; i < 16; i++)
-    {
-        if (i % 2 == 0)
-        {
+TEST(cppDESTest, Test1)
+{
+    ui64 input = 0x9474B8E8C73BCA7D;
+    for (int i = 0; i < 16; i++) {
+        if (i % 2 == 0) {
             input = DES::encrypt(input, input);
             printf("E: %016lX\n", input);
-        }
-        else
-        {
+        } else {
             input = DES::decrypt(input, input);
             printf("D: %016lX\n", input);
         }
     }
 }
 
-TEST(cppDESTest, Test2) {
+TEST(cppDESTest, Test2)
+{
     ui64 input = 0x9474B8E8C73BCA7D;
-    ui64 key   = 0x0000000000000000;
+    ui64 key = 0x0000000000000000;
     test(input, key);
 }
 
-TEST(cppDESTest, Test3) {
+TEST(cppDESTest, Test3)
+{
     test(0x0000000000000000, 0x0000000000000000);
     test(0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF);
 }
 
-TEST(cppDESTest, Test4) {
+TEST(cppDESTest, Test4)
+{
     DES3 des(0x2BD6459F82C5B300, 0x952C49104881FF48, 0x2BD6459F82C5B300);
     ui64 input = 0x8598538A8ECF117D;
 
@@ -57,7 +57,8 @@ TEST(cppDESTest, Test4) {
     EXPECT_EQ(result, input);
 }
 
-TEST(cppDESTest, Test5) {
+TEST(cppDESTest, Test5)
+{
     DESCBC des(0xFFFFFFFFFFFFFFFF, 0x0000000000000000);
 
     ui64 input1 = 0x0000000000000000;

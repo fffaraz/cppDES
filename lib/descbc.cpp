@@ -1,9 +1,9 @@
 #include "cppdes/descbc.h"
 
-DESCBC::DESCBC(ui64 key, ui64 iv) :
-    des(key),
-    iv(iv),
-    last_block(iv)
+DESCBC::DESCBC(ui64 key, ui64 iv)
+    : des(key)
+    , iv(iv)
+    , last_block(iv)
 {
 }
 
