@@ -8,15 +8,16 @@ add_library(
   libcppdes
   include/cppdes/des.h
   include/cppdes/des3.h
+  include/cppdes/des3cbc.h
   include/cppdes/descbc.h
   include/cppdes/fileencryption.h
   lib/des_key.h
   lib/des_lookup.h
   lib/des.cpp
   lib/des3.cpp
+  lib/des3cbc.cpp
   lib/descbc.cpp
   lib/fileencryption.cpp)
-
 target_include_directories(libcppdes PUBLIC include)
 
 add_executable(cppDES src/main.cpp)

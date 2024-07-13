@@ -2,15 +2,15 @@
 
 #include <string>
 
-#include "cppdes/descbc.h"
+#include "cppdes/des3cbc.h"
 
 class FileEncryption {
 public:
-    FileEncryption(ui64 key);
+    FileEncryption(ui64 key1, ui64 key2, ui64 key3);
     int encrypt(std::string input, std::string output);
     int decrypt(std::string input, std::string output);
     int cipher(std::string input, std::string output, bool mode);
 
 private:
-    DESCBC des;
+    DES3CBC des;
 };

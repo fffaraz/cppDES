@@ -1,17 +1,17 @@
 #pragma once
 
-#include "cppdes/des.h"
+#include "cppdes/des3.h"
 
-// DES-CBC
-class DESCBC {
+// Triple DES in CBC mode
+class DES3CBC {
 public:
-    DESCBC(ui64 key, ui64 iv);
+    DES3CBC(ui64 key1, ui64 key2, ui64 key3, ui64 iv);
     ui64 encrypt(ui64 block);
     ui64 decrypt(ui64 block);
     void reset();
 
 private:
-    DES des;
+    DES3 des3;
     ui64 iv;
     ui64 last_block;
 };
