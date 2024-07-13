@@ -1,4 +1,4 @@
-#include "des3.h"
+#include "cppdes/des3.h"
 
 DES3::DES3(ui64 k1, ui64 k2, ui64 k3) :
     des1(k1),

@@ -1,7 +1,6 @@
-#ifndef DESCBC_H
-#define DESCBC_H
+#pragma once
 
-#include "des.h"
+#include "cppdes/des.h"
 
 class DESCBC
 {
@@ -16,5 +15,3 @@ private:
     ui64 iv;
     ui64 last_block;
 };
-
-#endif // DESCBC_H

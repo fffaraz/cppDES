@@ -1,7 +1,6 @@
-#ifndef DES3_H
-#define DES3_H
+#pragma once
 
-#include "des.h"
+#include "cppdes/des.h"
 
 class DES3
 {
@@ -15,5 +14,3 @@ private:
     DES des2;
     DES des3;
 };
-
-#endif // DES3_H

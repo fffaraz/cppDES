@@ -1,34 +1,36 @@
-#include "fileencryption.h"
+#include "cppdes/fileencryption.h"
+
+#include <fstream>
 
 FileEncryption::FileEncryption(ui64 key) :
     des(key, (ui64) 0x0000000000000000)
 {
 }
 
-int FileEncryption::encrypt(string input, string output)
+int FileEncryption::encrypt(std::string input, std::string output)
 {
     return cipher(input, output, false);
 }
 
-int FileEncryption::decrypt(string input, string output)
+int FileEncryption::decrypt(std::string input, std::string output)
 {
     return cipher(input, output, true);
 }
 
-int FileEncryption::cipher(string input, string output, bool mode)
+int FileEncryption::cipher(std::string input, std::string output, bool mode)
 {
-    ifstream ifile;
-    ofstream ofile;
+    std::ifstream ifile;
+    std::ofstream ofile;
     ui64 buffer;
 
     if(input.length()  < 1) input  = "/dev/stdin";
     if(output.length() < 1) output = "/dev/stdout";
 
-    ifile.open(input,  ios::binary | ios::in | ios::ate);
-    ofile.open(output, ios::binary | ios::out);
+    ifile.open(input,  std::ios::binary | std::ios::in | std::ios::ate);
+    ofile.open(output, std::ios::binary | std::ios::out);
 
     ui64 size = ifile.tellg();
-    ifile.seekg(0, ios::beg);
+    ifile.seekg(0, std::ios::beg);
 
     ui64 block = size / 8;
     if(mode) block--;

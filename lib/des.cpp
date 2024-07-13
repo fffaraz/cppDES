@@ -1,9 +1,8 @@
-#include "des.h"
+#include "cppdes/des.h"
+
 #include "des_key.h"
 #include "des_data.h"
-#include "des_lookup.h"
 
-//#pragma GCC push_options
 #pragma GCC optimize ("unroll-loops")
 
 DES::DES(ui64 key)

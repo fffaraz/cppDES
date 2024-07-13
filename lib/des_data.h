@@ -1,5 +1,4 @@
-#ifndef DES_DATA_H
-#define DES_DATA_H
+#pragma once
 
 #define LB32_MASK 0x00000001
 #define LB64_MASK 0x0000000000000001
@@ -118,4 +117,3 @@ static const char PBOX[] =
     22, 11,  4, 25
 };
 
-#endif // DES_DATA_H

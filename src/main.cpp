@@ -1,32 +1,28 @@
-#include <iostream>
-using namespace std;
+#include "cppdes/fileencryption.h"
 
-#include "tests.h"
-#include "fileencryption.h"
+#include <iostream>
 
 void usage()
 {
-    cout << "Usage: cppDES -e/-d key [input-file] [output-file]" << endl;
+    std::cout << "Usage: cppDES -e/-d key [input-file] [output-file]" << std::endl;
 }
 
 int main(int argc, char **argv)
 {
-    //alltests(); return 0;
-
     if(argc < 3)
     {
         usage();
         return 1;
     }
 
-    string enc_dec = argv[1];
+    std::string enc_dec = argv[1];
     if(enc_dec != "-e" && enc_dec != "-d")
     {
         usage();
         return 2;
     }
 
-    string input,output;
+    std::string input,output;
     if(argc > 3)
         input  = argv[3];
     if(argc > 4)

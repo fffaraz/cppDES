@@ -1,5 +1,4 @@
-#ifndef DES_KEY_H
-#define DES_KEY_H
+#pragma once
 
 // Permuted Choice 1 Table [7*8]
 static const char PC1[] =
@@ -34,5 +33,3 @@ static const char ITERATION_SHIFT[] =
 //  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16
     1,  1,  2,  2,  2,  2,  2,  2,  1,  2,  2,  2,  2,  2,  2,  1
 };
-
-#endif // DES_KEY_H
