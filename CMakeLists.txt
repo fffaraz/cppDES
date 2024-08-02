@@ -10,27 +10,21 @@ add_library(
   include/cppdes/des3.h
   include/cppdes/des3cbc.h
   include/cppdes/descbc.h
-  include/cppdes/fileencryption.h
   lib/des_key.h
   lib/des_lookup.h
   lib/des.cpp
   lib/des3.cpp
   lib/des3cbc.cpp
-  lib/descbc.cpp
-  lib/fileencryption.cpp)
+  lib/descbc.cpp)
 target_include_directories(libcppdes PUBLIC include)
 
-add_executable(cppDES src/main.cpp)
+add_executable(cppDES src/main.cpp src/fileencryption.h src/fileencryption.cpp)
 target_link_libraries(cppDES libcppdes)
 
 include(FetchContent)
 FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.tar.gz)
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt
-    ON
-    CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 enable_testing()
